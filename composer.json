@@ -2,7 +2,12 @@
     "name": "caio/ohana",
     "autoload": {
         "psr-4": {
-            "Caio\\Ohana\\": "src/"
+            "app\\": "src/app/",
+            "controller\\": "src/controller/",
+            "model\\": "src/model/",
+            "routes\\": "src/routes/",
+            "validators\\": "src/validators/",
+            "response\\": "src/response/"
         }
     },
     "authors": [
@@ -14,6 +19,7 @@
     "require": {
         "slim/psr7": "^1.7",
         "respect/validation": "^2.4",
-        "slim/slim": "4.*"
+        "slim/slim": "4.*",
+        "ramsey/uuid": "^4.7"
     }
 }

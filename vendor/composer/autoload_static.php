@@ -12,9 +12,31 @@ class ComposerStaticInitba12d7ac07567e989cd692146d7c503b
         '2df68f9e79c919e2d88506611769ed2e' => __DIR__ . '/..' . '/respect/stringifier/src/stringify.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
+        'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
+        'v' => 
+        array (
+            'validators\\' => 11,
+        ),
+        'r' => 
+        array (
+            'routes\\' => 7,
+            'response\\' => 9,
+        ),
+        'm' => 
+        array (
+            'model\\' => 6,
+        ),
+        'c' => 
+        array (
+            'controller\\' => 11,
+        ),
+        'a' => 
+        array (
+            'app\\' => 4,
+        ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Php80\\' => 23,
@@ -26,6 +48,8 @@ class ComposerStaticInitba12d7ac07567e989cd692146d7c503b
         array (
             'Respect\\Validation\\' => 19,
             'Respect\\Stringifier\\' => 20,
+            'Ramsey\\Uuid\\' => 12,
+            'Ramsey\\Collection\\' => 18,
         ),
         'P' => 
         array (
@@ -39,13 +63,37 @@ class ComposerStaticInitba12d7ac07567e989cd692146d7c503b
             'Fig\\Http\\Message\\' => 17,
             'FastRoute\\' => 10,
         ),
-        'C' => 
+        'B' => 
         array (
-            'Caio\\Ohana\\' => 11,
+            'Brick\\Math\\' => 11,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'validators\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/validators',
+        ),
+        'routes\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/routes',
+        ),
+        'response\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/response',
+        ),
+        'model\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/model',
+        ),
+        'controller\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/controller',
+        ),
+        'app\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/app',
+        ),
         'Symfony\\Polyfill\\Php80\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
@@ -69,6 +117,14 @@ class ComposerStaticInitba12d7ac07567e989cd692146d7c503b
         'Respect\\Stringifier\\' => 
         array (
             0 => __DIR__ . '/..' . '/respect/stringifier/src',
+        ),
+        'Ramsey\\Uuid\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ramsey/uuid/src',
+        ),
+        'Ramsey\\Collection\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ramsey/collection/src',
         ),
         'Psr\\Log\\' => 
         array (
@@ -96,9 +152,9 @@ class ComposerStaticInitba12d7ac07567e989cd692146d7c503b
         array (
             0 => __DIR__ . '/..' . '/nikic/fast-route/src',
         ),
-        'Caio\\Ohana\\' => 
+        'Brick\\Math\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/src',
+            0 => __DIR__ . '/..' . '/brick/math/src',
         ),
     );
 

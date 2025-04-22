@@ -1,8 +1,10 @@
 <?php 
 
-namespace App;
+namespace app;
 
 use Slim\Factory\AppFactory;
+
+use routes\UserRoutes;
 
 class App {
     public static function AppRun()
@@ -10,6 +12,8 @@ class App {
         $app = AppFactory::create();
 
         $app->addErrorMiddleware(true, true, true);
+
+        new UserRoutes($app);
 
         $app->run();
     }

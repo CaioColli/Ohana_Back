@@ -6,17 +6,25 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'validators\\' => array($baseDir . '/src/validators'),
+    'routes\\' => array($baseDir . '/src/routes'),
+    'response\\' => array($baseDir . '/src/response'),
+    'model\\' => array($baseDir . '/src/model'),
+    'controller\\' => array($baseDir . '/src/controller'),
+    'app\\' => array($baseDir . '/src/app'),
     'Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Slim\\Psr7\\' => array($vendorDir . '/slim/psr7/src'),
     'Slim\\' => array($vendorDir . '/slim/slim/Slim'),
     'Respect\\Validation\\' => array($vendorDir . '/respect/validation/library'),
     'Respect\\Stringifier\\' => array($vendorDir . '/respect/stringifier/src'),
+    'Ramsey\\Uuid\\' => array($vendorDir . '/ramsey/uuid/src'),
+    'Ramsey\\Collection\\' => array($vendorDir . '/ramsey/collection/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/src'),
     'Psr\\Http\\Server\\' => array($vendorDir . '/psr/http-server-middleware/src', $vendorDir . '/psr/http-server-handler/src'),
     'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-factory/src', $vendorDir . '/psr/http-message/src'),
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'Fig\\Http\\Message\\' => array($vendorDir . '/fig/http-message-util/src'),
     'FastRoute\\' => array($vendorDir . '/nikic/fast-route/src'),
-    'Caio\\Ohana\\' => array($baseDir . '/src'),
+    'Brick\\Math\\' => array($vendorDir . '/brick/math/src'),
 );

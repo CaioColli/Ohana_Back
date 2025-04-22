@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Model\Data;
+namespace model\data;
 
 use PDO;
 
-class connection
+class Connection
 {
     private static $host = 'localhost';
     private static $port = '3306';
@@ -18,7 +18,7 @@ class connection
             $pdo = new PDO("mysql:host=" . self::$host . ";port=" . self::$port . ";dbname=" . self::$database, self::$user, self::$password);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            echo "Conexão realizada com sucesso!";
+            return $pdo;
         } catch (\Exception $err) {
             die('Erro ao tentar se conectar com o banco de dados: ' . $err->getMessage());
         }
