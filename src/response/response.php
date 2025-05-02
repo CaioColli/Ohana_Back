@@ -36,4 +36,15 @@ class Response {
 
         return $response;
     }
+
+    public static function Return401($response, $data) {
+        $response = $response->withStatus(401);
+        $response->getBody()->write(json_encode([
+            'status' => 401,
+            'message' => 'Unauthorized',
+            'data' => $data
+        ]));
+
+        return $response;
+    }
 }

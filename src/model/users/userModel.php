@@ -99,4 +99,31 @@ class UserModel
             throw new Exception('Erro ao realizar login' . $err->getMessage());
         }
     }
+
+    public static function GetUserByToken($token)
+    {
+        try {
+            $db = Connection::getConnection();
+
+            $sql = $db->prepare('
+                SELECT 
+                    User_ID,
+                    User_Name,
+                    User_Email,
+                    User_CPF,
+                    User_Password,
+                    User_Token,
+                    User_Token_Expiration
+                FROM users
+                    WHERE User_Token = :User_Token
+            ');
+
+            $sql->bindValue(':User_Token', $token);
+            $sql->execute();
+
+            return $sql->fetch();
+        } catch (Exception $err) {
+            throw new Exception('Erro ao receber dados do usuário via token' . $err->getMessage());
+        }
+    }
 }
