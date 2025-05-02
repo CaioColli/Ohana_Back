@@ -22,19 +22,19 @@ class UserController
             $rules = UserValidator::UserCadaster();
 
             if (!$rules['User_Name']->validate($data['User_Name'])) {
-                return Response::Return400($response, 'O campo é obrigatório e deve conter de 3 a 100 caracteres!');
+                return Response::Return422($response, 'O campo é obrigatório e deve conter de 3 a 100 caracteres!');
             }
 
             if (!$rules['User_Email']->validate($data['User_Email'])) {
-                return Response::Return400($response, 'O campo é obrigatório e deve ser um email válido!');
+                return Response::Return422($response, 'O campo é obrigatório e deve ser um email válido!');
             }
 
             if (!$rules['User_CPF']->validate($data['User_CPF'])) {
-                return Response::Return400($response, 'O campo é obrigatório e deve ser um CPF válido!');
+                return Response::Return422($response, 'O campo é obrigatório e deve ser um CPF válido!');
             }
 
             if (!$rules['User_Password']->validate($data['User_Password'])) {
-                return Response::Return400($response, 'O campo é obrigatório e deve conter de no mínimo 6 caracteres contento 1 letra e 1 caractere especial!');
+                return Response::Return422($response, 'O campo é obrigatório e deve conter de no mínimo 6 caracteres contento 1 letra e 1 caractere especial!');
             }
 
             $protectedPassword = password_hash($data['User_Password'], PASSWORD_DEFAULT);
@@ -56,7 +56,9 @@ class UserController
     {
         $data = json_decode($request->getBody()->getContents(), true);
 
-        $dataBaseLogin = UserModel::UserLogin($data['User_Email']);
+        $dataBaseLogin = UserModel::UserData($data['User_Email']);
+        
+        $userToken = $dataBaseLogin['User_Token'];
 
         $rules = UserValidator::UserLogin();
 
@@ -83,6 +85,53 @@ class UserController
             $date->format('Y-m-d H:i:s')
         );
 
-        return Response::Return200($response, 'Login realizado com sucesso!');
+        return Response::Return200($response, $userToken);
+    }
+
+    public function UserEdit(PsrRequest $request, PsrResponse $response)
+    {
+        $user = $request->getAttribute('user');
+
+        $data = json_decode($request->getBody()->getContents(), true);
+
+        $rules = UserValidator::UserEdit();
+
+        if (empty($data['User_Password'])) {
+            return Response::Return400($response, 'é obrigatório inserir a senha para efeturar alterações!');
+        }
+
+        if (!password_verify($data['User_Password'], $user['User_Password'])) {
+            return Response::Return400($response, 'Senha incorreta!');
+        } 
+
+        if (!$rules['User_Name']->validate($data['User_Name'])) {
+            return Response::Return422($response, 'O campo é obrigatório e deve conter de 3 a 100 caracteres!');
+        }
+
+        if (!$rules['User_Email']->validate($data['User_Email'])) {
+            return Response::Return422($response, 'O campo é obrigatório e deve ser um email válido!');
+        }
+
+        if (!$rules['User_New_Password']->validate($data['User_New_Password'])) {
+            return Response::Return422($response, 'O campo é obrigatório e deve conter de no mínimo 6 caracteres contento 1 letra e 1 caractere especial!');
+        }
+
+        $userName = $data['User_Name'] ?? $user['User_Name'];
+        $userEmail = $data['User_Email'] ?? $user['User_Email'];
+
+        if (empty($data['User_New_Password'])) {
+            $protectedPassword = $user['User_Password'];
+        } else {
+            $protectedPassword = password_hash($data['User_New_Password'], PASSWORD_DEFAULT);
+        }
+
+        UserModel::UserEdit(
+            $user['User_ID'],
+            $userName,
+            $userEmail,
+            $protectedPassword
+        );
+
+        return Response::Return200($response, 'Perfil editado com sucesso!');
     }
 }

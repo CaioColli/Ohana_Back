@@ -55,7 +55,7 @@ class UserModel
         }
     }
 
-    public static function UserLogin($userEmail)
+    public static function UserData($userEmail)
     {
         try {
             $db = Connection::getConnection();
@@ -63,7 +63,8 @@ class UserModel
             $sql = $db->prepare('
                 SELECT 
                     User_Email,
-                    User_Password
+                    User_Password,
+                    User_Token
                 FROM users
                     WHERE User_Email = :User_Email
             ');
@@ -71,9 +72,7 @@ class UserModel
             $sql->bindValue(':User_Email', $userEmail);
             $sql->execute();
 
-            if ($sql->rowCount() > 0) {
-                return $sql->fetch();
-            }
+            return $sql->fetch();
         } catch (Exception $err) {
             throw new Exception('Erro ao realizar login');
         }
@@ -124,6 +123,29 @@ class UserModel
             return $sql->fetch();
         } catch (Exception $err) {
             throw new Exception('Erro ao receber dados do usuário via token' . $err->getMessage());
+        }
+    }
+
+    public static function UserEdit($userID, $userName, $userEmail, $userNewPassword)
+    {
+        try {
+            $db = Connection::getConnection();
+
+            $sql = $db->prepare('
+                UPDATE users
+                    SET User_Name = :User_Name,
+                    User_Email = :User_Email,
+                    User_Password = :User_Password
+                WHERE User_ID = :User_ID
+            ');
+
+            $sql->bindValue(':User_ID', $userID);
+            $sql->bindValue(':User_Name', $userName);
+            $sql->bindValue(':User_Email', $userEmail);
+            $sql->bindValue(':User_Password', $userNewPassword);
+            $sql->execute();
+        } catch (Exception $err) {
+            throw new Exception('Erro ao tentar editar usuário' . $err->getMessage());
         }
     }
 }

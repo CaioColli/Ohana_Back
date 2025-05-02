@@ -5,6 +5,8 @@ namespace routes;
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 
+use app\middleware\AuthTokenMiddleware;
+
 class UserRoutes
 {
     public function __construct(App $app)
@@ -18,9 +20,9 @@ class UserRoutes
                 $group->post('', \controller\users\UserController::class . ':UserLogin');
             });
 
-            $group->group('', function (RouteCollectorProxy $group) {
-        
-            });
+            $group->group('/edit', function (RouteCollectorProxy $group) {
+                $group->patch('', \controller\users\UserController::class . ':UserEdit');
+            })->add(AuthTokenMiddleware::class);
         });
     }
 }

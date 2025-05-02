@@ -2,19 +2,33 @@
 
 namespace app\middleware;
 
-use model\users\UserModel;
-use Psr\Http\Message\ResponseInterface as PsrResponse;
-use Psr\Http\Message\ServerRequestInterface as PsrRequest;
-use response\Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
-class authTokenMiddleware
+use model\users\UserModel;
+
+class AuthTokenMiddleware
 {
-    public function __invoke(PsrRequest $request, PsrResponse $response, $handler)
+    public function __invoke(Request $request, RequestHandler $handler)
     {
         $token = $request->getHeader('Token')[0] ?? null;
 
         if (!$token) {
-            return Response::Return401($response, 'Token não encontrado.');
+            return $this->DenyAcess('Token não econtrado!');
+        }
+
+        $userData = UserModel::GetUserByToken($token);
+        $userToken = $userData['User_Token'];
+
+        if ($token != $userToken) {
+            return $this->DenyAcess('Token inválido!');
+        }
+
+        $currentTime = new \DateTime('now', new \DateTimeZone('America/Sao_Paulo'));
+        $tokenExpiration = new \DateTime($userData['User_Token_Expiration'], new \DateTimeZone('America/Sao_Paulo'));
+
+        if ($currentTime > $tokenExpiration) {
+            return $this->DenyAcess('Token expirado!');
         }
 
         try {
@@ -24,7 +38,21 @@ class authTokenMiddleware
 
             return $handler->handle($request);
         } catch (\Exception $e) {
-            return Response::Return401($response, $e->getMessage());
+            return $this->DenyAcess($e->getMessage());
         }
+    }
+
+    public function DenyAcess($message)
+    {
+        $response = new \Slim\Psr7\Response();
+        $response = $response->withStatus(401);
+
+        $response->getBody()->write(json_encode([
+            'status' => 401,
+            'message' => 'Unauthorized',
+            'data' => $message,
+        ]));
+
+        return $response;
     }
 }

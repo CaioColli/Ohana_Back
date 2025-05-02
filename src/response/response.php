@@ -47,4 +47,15 @@ class Response {
 
         return $response;
     }
+
+    public static function Return422($response, $data) {
+        $response = $response->withStatus(422);
+        $response->getBody()->write(json_encode([
+            'status' => 422,
+            'message' => 'Unprocessable Entity',
+            'data' => $data
+        ]));
+
+        return $response;
+    }
 }

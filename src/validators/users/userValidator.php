@@ -23,4 +23,13 @@ class UserValidator
             'User_Password' => v::notEmpty()
         ];
     }
+
+    public static function UserEdit()
+    {
+        return [
+            'User_Name' => v::optional(v::notEmpty()->length(3, 100)),
+            'User_Email' => v::optional(v::notEmpty()->email()),
+            'User_New_Password' => v::optional(v::notEmpty()->regex('/^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W)[\d\w\W]{6,}$/'))
+        ];
+    }
 }
