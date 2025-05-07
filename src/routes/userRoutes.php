@@ -16,6 +16,10 @@ class UserRoutes
                 $group->post('', \controller\users\UserController::class . ':UserCadaster');
             });
 
+            $group->group('/reset', function (RouteCollectorProxy $group) {
+                $group->post('', \controller\users\UserController::class . ':SetResetTokenPassword');
+            });
+
             $group->group('/login', function (RouteCollectorProxy $group) {
                 $group->post('', \controller\users\UserController::class . ':UserLogin');
             });

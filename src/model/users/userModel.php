@@ -5,6 +5,7 @@ namespace model\users;
 use Exception;
 
 use model\data\Connection;
+use PDO;
 
 class UserModel
 {
@@ -78,7 +79,56 @@ class UserModel
         }
     }
 
-    public static function SetUserToken($userEmail, $userToken, $userTokenExpiration) 
+    public static function GetEmails()
+    {
+        try {
+            $db = Connection::GetConnection();
+
+            $sql = $db->prepare('
+                SELECT 
+                    User_Name,
+                    User_Email
+                FROM users
+            ');
+
+            $sql->execute();
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $err) {
+            throw new Exception('Erro ao recuperar emails' . $err->getMessage());
+        }
+    }
+
+    public static function SetResetTokenPassword($userEmail, $token, $tokenExpiration) 
+    {
+        try {
+            $db = Connection::GetConnection();
+
+            $sql = $db->prepare('
+                INSERT INTO password_reset
+                (
+                    user_Email,
+                    token,
+                    token_Expiration
+                )
+                VALUES
+                (
+                    :user_Email,
+                    :token,
+                    :token_Expiration
+                )
+            ');
+
+            $sql->bindValue(':user_Email', $userEmail);
+            $sql->bindValue(':token', $token);
+            $sql->bindValue(':token_Expiration', $tokenExpiration);
+
+            $sql->execute();
+        } catch (Exception $err) {
+            throw new Exception('Erro ao salver token de reset' . $err->getMessage());
+        }
+    }
+
+    public static function SetUserToken($userEmail, $userToken, $userTokenExpiration)
     {
         try {
             $db = Connection::getConnection();

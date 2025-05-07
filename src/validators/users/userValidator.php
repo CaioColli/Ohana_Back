@@ -16,6 +16,13 @@ class UserValidator
         ];
     }
 
+    public static function SetResetTokenPassword()
+    {
+        return [
+            'User_Email' => v::notEmpty()->email()
+        ];
+    }
+
     public static function UserLogin()
     {
         return [

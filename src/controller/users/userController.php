@@ -2,15 +2,15 @@
 
 namespace controller\users;
 
+use app\helpers\Mailer;
 use DateTime;
-use model\users\UserModel;
-
 use Psr\Http\Message\ResponseInterface as PsrResponse;
 use Psr\Http\Message\ServerRequestInterface as PsrRequest;
 use Ramsey\Uuid\Uuid;
 
 use response\Response;
 use validators\users\UserValidator;
+use model\users\UserModel;
 
 class UserController
 {
@@ -52,12 +52,52 @@ class UserController
         }
     }
 
+    public function SetResetTokenPassword(PsrRequest $request, PsrResponse $response)
+    {
+        $data = json_decode($request->getBody()->getContents(), true);
+
+        $usersData = UserModel::GetEmails();
+        $user = null;
+
+        foreach ($usersData as $u) {
+            if ($u['User_Email'] === $data['User_Email']) {
+                $user = $u;
+                break;
+            }
+        }
+
+        $rules = UserValidator::SetResetTokenPassword();
+
+        if (!$rules['User_Email']->validate($data['User_Email'])) {
+            return Response::Return400($response, 'O campo é obrigatório e deve ser um email válido!');
+        }
+
+        if (!$user) {
+            return Response::Return400($response, 'Esse email não possui cadastro');
+        }
+
+        $tokenReset = substr(bin2hex(random_bytes(4)), 0, 7);
+
+        $date = new DateTime();
+        $date->modify('+1 hours');
+
+        UserModel::SetResetTokenPassword(
+            $data['User_Email'],
+            $tokenReset,
+            $date->format('Y-m-d H:i:s')
+        );
+
+        Mailer::SendEmail($user['User_Email'], $user['User_Name'], $tokenReset);
+
+        return Response::Return200($response, 'Código de recuperação enviado para o email: ' . $data['User_Email']);
+    }
+
     public function UserLogin(PsrRequest $request, PsrResponse $response)
     {
         $data = json_decode($request->getBody()->getContents(), true);
 
         $dataBaseLogin = UserModel::UserData($data['User_Email']);
-        
+
         $userToken = $dataBaseLogin['User_Token'];
 
         $rules = UserValidator::UserLogin();
@@ -75,7 +115,7 @@ class UserController
         }
 
         $userToken = Uuid::uuid4()->toString();
-        
+
         $date = new DateTime();
         $date->modify('+24 hours');
 
@@ -102,7 +142,7 @@ class UserController
 
         if (!password_verify($data['User_Password'], $user['User_Password'])) {
             return Response::Return400($response, 'Senha incorreta!');
-        } 
+        }
 
         if (!$rules['User_Name']->validate($data['User_Name'])) {
             return Response::Return422($response, 'O campo é obrigatório e deve conter de 3 a 100 caracteres!');

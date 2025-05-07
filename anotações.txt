@@ -1,0 +1,3 @@
+Libs usadas
+
+Respect validation, Slim Framework, Ramsey UUID, PHPMailer, vlucas phpdotenv.
