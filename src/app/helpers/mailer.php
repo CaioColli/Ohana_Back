@@ -31,23 +31,23 @@ class Mailer
             $mail->Subject = 'Recuperar senha';
             $mail->Body = "
                 <div>
-                    <header>
-                        <h1>Olá {$name}.</h1>
-                        <p>
+                    <header style='margin-bottom: 1.5rem'>
+                        <h1 style='font-size: 2rem; margin: 0; color:#ed5e32'>Olá {$name}.</h1>
+                        <p style='margin: 0'>
                             Recebemos sua solicitação para recuperar sua senha de acesso a nossa plataforma.
                         </p>
                     </header>
 
                     <div>
-                        <p>
-                            Seu código para recuperar sua senha de acesso é: <span>{$token}</span>
+                        <p style='margin: 0 0 16px 0'>
+                            Seu código para recuperar sua senha de acesso é: <span style='font-size: 1.5rem; font-weight: bold; color:#ed5e32'>{$token}</span>
                         </p>
 
-                        <p>
+                        <p style='margin: 0 0 8px 0'>
                             Caso não solicitou a mudança de sua senha de acesso, por favor ignore este email.
                         </p>
 
-                        <p>
+                        <p style='margin: 0'>
                             Atenciosamente,<br>
                             Equipe OhanaTravel
                         </p>
