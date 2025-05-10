@@ -79,7 +79,7 @@ class UserModel
         }
     }
 
-    public static function GetEmails()
+    public static function GetCadastersEmails()
     {
         try {
             $db = Connection::GetConnection();
@@ -102,6 +102,14 @@ class UserModel
     {
         try {
             $db = Connection::GetConnection();
+
+            $sql = $db->prepare('
+                DELETE FROM password_reset
+                WHERE user_Email = :user_Email
+            ');
+
+            $sql->bindValue(':user_Email', $userEmail);
+            $sql->execute();
 
             $sql = $db->prepare('
                 INSERT INTO password_reset

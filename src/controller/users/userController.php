@@ -56,7 +56,7 @@ class UserController
     {
         $data = json_decode($request->getBody()->getContents(), true);
 
-        $usersData = UserModel::GetEmails();
+        $usersData = UserModel::GetCadastersEmails();
         $user = null;
 
         foreach ($usersData as $u) {
@@ -78,12 +78,14 @@ class UserController
 
         $tokenReset = substr(bin2hex(random_bytes(4)), 0, 7);
 
+        $tokenHash = password_hash($tokenReset, PASSWORD_DEFAULT);
+
         $date = new DateTime();
         $date->modify('+1 hours');
 
         UserModel::SetResetTokenPassword(
             $data['User_Email'],
-            $tokenReset,
+            $tokenHash,
             $date->format('Y-m-d H:i:s')
         );
 
