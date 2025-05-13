@@ -17,7 +17,9 @@ class UserRoutes
             });
 
             $group->group('/reset', function (RouteCollectorProxy $group) {
-                $group->post('', \controller\users\UserController::class . ':SetResetTokenPassword');
+                $group->post('', \controller\users\UserController::class . ':SetResetToken');
+
+                $group->post('/change_password', \controller\users\UserController::class . ':ResetPassword');
             });
 
             $group->group('/login', function (RouteCollectorProxy $group) {

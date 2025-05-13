@@ -52,7 +52,7 @@ class UserController
         }
     }
 
-    public function SetResetTokenPassword(PsrRequest $request, PsrResponse $response)
+    public function SetResetToken(PsrRequest $request, PsrResponse $response)
     {
         $data = json_decode($request->getBody()->getContents(), true);
 
@@ -66,7 +66,7 @@ class UserController
             }
         }
 
-        $rules = UserValidator::SetResetTokenPassword();
+        $rules = UserValidator::MailValidation();
 
         if (!$rules['User_Email']->validate($data['User_Email'])) {
             return Response::Return400($response, 'O campo é obrigatório e deve ser um email válido!');
@@ -80,10 +80,10 @@ class UserController
 
         $tokenHash = password_hash($tokenReset, PASSWORD_DEFAULT);
 
-        $date = new DateTime();
-        $date->modify('+1 hours');
+        $date = new DateTime('now', new \DateTimeZone('America/Sao_Paulo'));
+        $date->modify('+1 hour');
 
-        UserModel::SetResetTokenPassword(
+        UserModel::SetResetToken(
             $data['User_Email'],
             $tokenHash,
             $date->format('Y-m-d H:i:s')
@@ -92,6 +92,34 @@ class UserController
         Mailer::SendEmail($user['User_Email'], $user['User_Name'], $tokenReset);
 
         return Response::Return200($response, 'Código de recuperação enviado para o email: ' . $data['User_Email']);
+    }
+
+    public function ResetPassword(PsrRequest $request, PsrResponse $response)
+    {
+        $data = json_decode($request->getBody()->getContents(), true);
+
+        $rules = UserValidator::ResetPassword();
+
+        if (!$rules['Reset_Code']->validate($data['Reset_Code'])) {
+            return Response::Return400($response, 'Por favor, insira o código de recuperação!');
+        }
+
+        if (!$rules['User_Password']->validate($data['User_Password'])) {
+            return Response::Return400($response, 'Para uma nova senha é obrigatório que ela contenha 6 caracteres contento 1 letra e 1 caractere especial!');
+        }
+
+        $tokenCode = UserModel::GetResetToken($data['Reset_Code']);
+
+        if (!$tokenCode) {
+            return Response::Return400($response, 'Código de recuperação inválido ou expirado!');
+        }
+
+        $protectedPassword = password_hash($data['User_Password'], PASSWORD_DEFAULT);
+
+        UserModel::SetResetPassword($protectedPassword, $tokenCode['user_Email']);
+        UserModel::DeleteResetToken($tokenCode['user_Email']);
+
+        return Response::Return200($response, 'Senha mudada com sucesso!');
     }
 
     public function UserLogin(PsrRequest $request, PsrResponse $response)
@@ -118,7 +146,7 @@ class UserController
 
         $userToken = Uuid::uuid4()->toString();
 
-        $date = new DateTime();
+        $date = new DateTime('now', new \DateTimeZone('America/Sao_Paulo'));
         $date->modify('+24 hours');
 
         UserModel::SetUserToken(
