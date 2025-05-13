@@ -6,6 +6,7 @@ use Exception;
 
 use model\data\Connection;
 use PDO;
+use PSpell\Config;
 
 class UserModel
 {
@@ -125,6 +126,23 @@ class UserModel
             $sql->execute();
         } catch (Exception $err) {
             throw new Exception('Erro ao tentar editar usuário' . $err->getMessage());
+        }
+    }
+
+    public static function UserDelete($userID)
+    {
+        try {
+            $db = Connection::GetConnection();
+
+            $sql = $db->prepare('
+                DELETE FROM users
+                WHERE User_ID = :User_ID
+            ');
+
+            $sql->bindValue(':User_ID', $userID);
+            $sql->execute();
+        } catch (Exception $err) {
+            throw new Exception('Erro ao tentar deletar usuário' . $err->getMessage());
         }
     }
 }

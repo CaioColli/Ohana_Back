@@ -29,6 +29,10 @@ class UserRoutes
             $group->group('/edit', function (RouteCollectorProxy $group) {
                 $group->patch('', \controller\users\UserController::class . ':UserEdit');
             })->add(AuthTokenMiddleware::class);
+
+            $group->group('/delete', function (RouteCollectorProxy $group) {
+                $group->delete('', \controller\users\UserController::class . ':UserDelete');
+            })->add(AuthTokenMiddleware::class);
         });
     }
 }

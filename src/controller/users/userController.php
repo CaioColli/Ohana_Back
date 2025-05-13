@@ -134,4 +134,25 @@ class UserController
 
         return Response::Return200($response, 'Perfil editado com sucesso!');
     }
+
+    public function UserDelete(PsrRequest $request, PsrResponse $response)
+    {
+        $user = $request->getAttribute('user');
+
+        $data = json_decode($request->getBody()->getContents(), true);
+
+        $rules = UserValidator::PasswordValidation();
+
+        if(!$rules['User_Password']->validate($data['User_Password'])) {
+            return Response::Return400($response, 'O campo é obrigatório para deletar conta.');
+        }
+
+        if (!password_verify($data['User_Password'], $user['User_Password'])) {
+            return Response::Return400($response, 'Senha incorreta!');
+        }
+
+        UserModel::UserDelete($user['User_ID']);
+
+        return Response::Return200($response, 'Conta deletada com sucesso!');
+    }
 }
