@@ -5,8 +5,6 @@ namespace model\users;
 use Exception;
 
 use model\data\Connection;
-use PDO;
-use PSpell\Config;
 
 class UserModel
 {
@@ -89,6 +87,7 @@ class UserModel
                     User_ID,
                     User_Name,
                     User_Email,
+                    Email_Verified,
                     User_CPF,
                     User_Password,
                     User_Token,

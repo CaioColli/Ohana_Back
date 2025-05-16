@@ -16,7 +16,7 @@ class UserValidator
     public static function PasswordValidation()
     {
         return [
-                'User_Password' => v::notEmpty()->regex('/^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W)[\d\w\W]{6,}$/')
+            'User_Password' => v::notEmpty()->regex('/^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W)[\d\w\W]{6,}$/')
         ];
     }
 
@@ -42,16 +42,14 @@ class UserValidator
 
     public static function UserEdit()
     {
-        return array_merge(
-            self::MailValidation(),
-            [
-                'User_Name' => v::optional(v::notEmpty()->length(3, 100)),
-                'User_New_Password' => v::optional(v::notEmpty()->regex('/^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W)[\d\w\W]{6,}$/'))
-            ]
-        );
+        return [
+            'User_Name' => v::optional(v::notEmpty()->length(3, 100)),
+            'User_Email' => v::optional(v::notEmpty()->email()),
+            'User_New_Password' => v::optional(v::notEmpty()->regex('/^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W)[\d\w\W]{6,}$/'))
+        ];
     }
 
-    public static function ResetPassword() 
+    public static function ResetPassword()
     {
         return array_merge(
             self::PasswordValidation(),
