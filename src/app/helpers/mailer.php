@@ -86,11 +86,15 @@ class Mailer
 
                     <div>
                         <p style='margin: 0 0 16px 0'>
-                            Para verificar seu email acesse o link: <a href='{$link}' style='font-size: 1.5rem; font-weight: bold; color:#ed5e32; text-decoration: none;'>Verificar E-mail</a>
+                            Para verificar seu email aperte o botão abaixo
                         </p>
 
+                        <button style='border: none; background-color:#ed5e32; padding: 8px 16px; border-radius: 8px; margin-bottom: 1rem'>
+                            <a href='{$link}' style='font-size: 1.5rem; font-weight: bold; color:#fff; text-decoration: none;'>Verificar E-mail</a>
+                        </button>
+
                         <p style='margin: 0 0 8px 0'>
-                            Caso não solicitou a mudança de sua senha de acesso, por favor ignore este email.
+                            Caso não solicitou a verificação de email, por favor ignore este email.
                         </p>
 
                         <p style='margin: 0'>
