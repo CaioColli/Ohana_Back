@@ -5,7 +5,6 @@ namespace model\users;
 use Exception;
 
 use model\data\Connection;
-use PDO;
 
 class AuthUserModel
 {

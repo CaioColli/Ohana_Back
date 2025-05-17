@@ -7,12 +7,12 @@ use Psr\Http\Message\ResponseInterface as PsrResponse;
 use Psr\Http\Message\ServerRequestInterface as PsrRequest;
 
 use app\helpers\Mailer;
-use model\users\PasswordResetModel;
+use model\users\UserTokenModel;
 use model\users\UserValidationModel;
 use response\Response;
 use validators\users\UserValidator;
 
-class PasswordResetController
+class UserTokenController
 {
     public function SetResetToken(PsrRequest $request, PsrResponse $response)
     {
@@ -45,13 +45,14 @@ class PasswordResetController
         $date = new DateTime('now', new \DateTimeZone('America/Sao_Paulo'));
         $date->modify('+1 hour');
 
-        PasswordResetModel::SetResetToken(
+        UserTokenModel::SetToken(
+            'Reset_Password',
             $data['User_Email'],
             $tokenHash,
             $date->format('Y-m-d H:i:s')
         );
 
-        Mailer::SendEmail($user['User_Email'], $user['User_Name'], $tokenReset);
+        Mailer::SendResetPasswordEmail($user['User_Email'], $user['User_Name'], $tokenReset);
 
         return Response::Return200($response, 'Código de recuperação enviado para o email: ' . $data['User_Email']);
     }
@@ -70,7 +71,7 @@ class PasswordResetController
             return Response::Return400($response, 'Para uma nova senha é obrigatório que ela contenha 6 caracteres contento 1 letra e 1 caractere especial!');
         }
 
-        $tokenCode = PasswordResetModel::GetResetToken($data['Reset_Code']);
+        $tokenCode = UserTokenModel::GetToken($data['Reset_Code'], 'Reset_Password');
 
         if (!$tokenCode) {
             return Response::Return400($response, 'Código de recuperação inválido ou expirado!');
@@ -78,9 +79,54 @@ class PasswordResetController
 
         $protectedPassword = password_hash($data['User_Password'], PASSWORD_DEFAULT);
 
-        PasswordResetModel::SetResetPassword($protectedPassword, $tokenCode['user_Email']);
-        PasswordResetModel::DeleteResetToken($tokenCode['user_Email']);
+        UserTokenModel::SetNewPassword($protectedPassword, $tokenCode['user_Email']);
+        UserTokenModel::DeleteToken($tokenCode['user_Email'], 'Reset_Password');
 
         return Response::Return200($response, 'Senha mudada com sucesso!');
+    }
+
+    public function SetVerifyEmailToken(PsrRequest $request, PsrResponse $response)
+    {
+        $user = $request->getAttribute('user');
+
+        $tokenCode = substr(bin2hex(random_bytes(4)), 0, 7);
+
+        $tokenHash = password_hash($tokenCode, PASSWORD_DEFAULT);
+
+        $date = new DateTime('now', new \DateTimeZone('America/Sao_Paulo'));
+        $date->modify('+1 hour');
+
+        UserTokenModel::SetToken(
+            'Verify_Email',
+            $user['User_Email'],
+            $tokenHash,
+            $date->format('Y-m-d H:i:s')
+        );
+
+        Mailer::SendVerificationEmail($user['User_Email'], $user['User_Name'], 'http://localhost:8000/user/verify_email/confirm?code=' . $tokenCode);
+
+        return Response::Return200($response, 'Requisição enviada com sucesso!');
+    }
+
+    public function VerifyEmail(PsrRequest $request, PsrResponse $response) 
+    {
+        $params = $request->getQueryParams();
+
+        if (empty($params['code'])) {
+            return Response::Return400($response, 'Código não informado.');
+        }
+
+        $code = $params['code'];
+
+        $tokenData = UserTokenModel::GetToken($code, 'Verify_Email');
+
+        if (!$tokenData) {
+            return Response::Return400($response, 'Código inválido ou expirado!');
+        }
+
+        UserTokenModel::SetEmailVerified($tokenData['user_Email']);
+        UserTokenModel::DeleteToken($tokenData['user_Email'], 'Verify_Email');
+
+        return Response::Return200($response, 'Email verificado com sucesso!');
     }
 }

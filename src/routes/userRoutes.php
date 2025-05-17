@@ -16,14 +16,20 @@ class UserRoutes
                 $group->post('', \controller\users\UserController::class . ':UserCadaster');
             });
 
-            $group->group('/reset', function (RouteCollectorProxy $group) {
-                $group->post('', \controller\users\PasswordResetController::class . ':SetResetToken');
-
-                $group->post('/change_password', \controller\users\PasswordResetController::class . ':ResetPassword');
-            });
-
             $group->group('/login', function (RouteCollectorProxy $group) {
                 $group->post('', \controller\users\UserController::class . ':UserLogin');
+            });
+
+            $group->group('/verify_email', function (RouteCollectorProxy $group) {
+                $group->post('', \controller\users\UserTokenController::class . ':SetVerifyEmailToken')->add(AuthTokenMiddleware::class);
+
+                $group->get('/confirm', \controller\users\UserTokenController::class . ':VerifyEmail');
+            });
+
+            $group->group('/reset', function (RouteCollectorProxy $group) {
+                $group->post('', \controller\users\UserTokenController::class . ':SetResetToken');
+
+                $group->post('/change_password', \controller\users\UserTokenController::class . ':ResetPassword');
             });
 
             $group->group('/edit', function (RouteCollectorProxy $group) {
