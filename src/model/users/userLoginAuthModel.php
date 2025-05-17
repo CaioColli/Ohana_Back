@@ -6,9 +6,9 @@ use Exception;
 
 use model\data\Connection;
 
-class AuthUserModel
+class UserLoginAuthModel
 {
-    public static function SetUserToken($userEmail, $userToken, $userTokenExpiration)
+    public static function SetLoginToken($userEmail, $userToken, $userTokenExpiration)
     {
         try {
             $db = Connection::getConnection();

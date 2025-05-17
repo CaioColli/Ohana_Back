@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseInterface as PsrResponse;
 use Psr\Http\Message\ServerRequestInterface as PsrRequest;
 
 use app\helpers\Mailer;
+use model\users\UserModel;
 use model\users\UserTokenModel;
 use model\users\UserValidationModel;
 use response\Response;
@@ -79,7 +80,7 @@ class UserTokenController
 
         $protectedPassword = password_hash($data['User_Password'], PASSWORD_DEFAULT);
 
-        UserTokenModel::SetNewPassword($protectedPassword, $tokenCode['user_Email']);
+        UserModel::SetNewPassword($protectedPassword, $tokenCode['user_Email']);
         UserTokenModel::DeleteToken($tokenCode['user_Email'], 'Reset_Password');
 
         return Response::Return200($response, 'Senha mudada com sucesso!');
@@ -124,7 +125,7 @@ class UserTokenController
             return Response::Return400($response, 'Código inválido ou expirado!');
         }
 
-        UserTokenModel::SetEmailVerified($tokenData['user_Email']);
+        UserModel::SetEmailVerified($tokenData['user_Email']);
         UserTokenModel::DeleteToken($tokenData['user_Email'], 'Verify_Email');
 
         return Response::Return200($response, 'Email verificado com sucesso!');

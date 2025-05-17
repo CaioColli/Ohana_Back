@@ -99,41 +99,4 @@ class UserTokenModel
             throw new Exception('Erro ao deletar token de reset' . $err->getMessage());
         }
     }
-
-    public static function SetNewPassword($userPassword, $userEmail)
-    {
-        try {
-            $db = Connection::GetConnection();
-
-            $sql = $db->prepare('
-                UPDATE users
-                    SET User_Password = :User_Password
-                WHERE User_Email = :User_Email
-            ');
-
-            $sql->bindValue(':User_Password', $userPassword);
-            $sql->bindValue(':User_Email', $userEmail);
-            $sql->execute();
-        } catch (Exception $err) {
-            throw new Exception('Erro a mudar a senha senha' . $err->getMessage());
-        }
-    }
-
-    public static function SetEmailVerified($userEmail)
-    {
-        try {
-            $db = Connection::GetConnection();
-
-            $sql = $db->prepare('
-                UPDATE users
-                    SET Email_Verified = 1
-                WHERE user_Email = :user_Email
-            ');
-
-            $sql->bindValue(':user_Email', $userEmail);
-            $sql->execute();
-        } catch (Exception $err) {
-            throw new Exception('Erro ao mudar a senha senha');
-        }
-    }
 }
