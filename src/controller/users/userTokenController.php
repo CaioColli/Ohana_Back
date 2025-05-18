@@ -90,6 +90,10 @@ class UserTokenController
     {
         $user = $request->getAttribute('user');
 
+        if ($user['Email_Verified'] != 0) {
+            return Response::Return400($response, 'Email já verificado, não há necessidade de verificar novamente!');
+        }
+
         $tokenCode = substr(bin2hex(random_bytes(4)), 0, 7);
 
         $tokenHash = password_hash($tokenCode, PASSWORD_DEFAULT);
@@ -111,6 +115,7 @@ class UserTokenController
 
     public function VerifyEmail(PsrRequest $request, PsrResponse $response) 
     {
+        // getQueryParams() recebe o parametro passado na URL
         $params = $request->getQueryParams();
 
         if (empty($params['code'])) {
