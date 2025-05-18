@@ -3,6 +3,7 @@
 namespace controller\users;
 
 use DateTime;
+use model\users\UserAuthModel;
 use Psr\Http\Message\ResponseInterface as PsrResponse;
 use Psr\Http\Message\ServerRequestInterface as PsrRequest;
 use Ramsey\Uuid\Uuid;
@@ -79,7 +80,7 @@ class UserController
         $date = new DateTime('now', new \DateTimeZone('America/Sao_Paulo'));
         $date->modify('+24 hours');
 
-        UserLoginAuthModel::SetLoginToken(
+        UserAuthModel::SetLoginToken(
             $data['User_Email'],
             $userToken,
             $date->format('Y-m-d H:i:s')

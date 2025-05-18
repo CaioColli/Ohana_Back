@@ -6,7 +6,7 @@ use Exception;
 
 use model\data\Connection;
 
-class UserLoginAuthModel
+class UserAuthModel
 {
     public static function SetLoginToken($userEmail, $userToken, $userTokenExpiration)
     {
