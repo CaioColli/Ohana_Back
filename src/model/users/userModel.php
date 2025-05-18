@@ -123,6 +123,15 @@ class UserModel
             $sql->bindValue(':User_Email', $userEmail);
             $sql->bindValue(':User_Password', $userNewPassword);
             $sql->execute();
+
+            $sql = $db->prepare('
+                UPDATE users
+                    SET Email_Verified = 0
+                WHERE User_ID = :User_ID
+            ');
+
+            $sql->bindValue(':User_ID', $userID);
+            $sql->execute();
         } catch (Exception $err) {
             throw new Exception('Erro ao tentar editar usuário' . $err->getMessage());
         }

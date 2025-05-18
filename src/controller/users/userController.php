@@ -3,15 +3,14 @@
 namespace controller\users;
 
 use DateTime;
-use model\users\UserAuthModel;
 use Psr\Http\Message\ResponseInterface as PsrResponse;
 use Psr\Http\Message\ServerRequestInterface as PsrRequest;
 use Ramsey\Uuid\Uuid;
 
-use model\users\UserLoginAuthModel;
-use response\Response;
 use validators\users\UserValidator;
+use model\users\UserAuthModel;
 use model\users\UserModel;
+use response\Response;
 
 class UserController
 {
