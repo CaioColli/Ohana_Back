@@ -154,6 +154,24 @@ class UserModel
         }
     }
 
+    public static function UserLogout($userID) {
+        try {
+            $db = Connection::GetConnection();
+
+            $sql = $db->prepare('
+                UPDATE users
+                    SET User_Token = NULL,
+                        User_Token_Expiration = NULL
+                WHERE User_ID = :User_ID 
+            ');
+            
+            $sql->bindValue(':User_ID', $userID);
+            $sql->execute();
+        } catch (Exception $err) {
+            throw new Exception('Erro ao tentar fazer logout' . $err->getMessage());
+        }
+    }
+
     public static function SetNewPassword($userPassword, $userEmail)
     {
         try {

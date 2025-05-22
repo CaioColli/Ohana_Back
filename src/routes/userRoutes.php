@@ -20,6 +20,10 @@ class UserRoutes
                 $group->post('', \controller\users\UserController::class . ':UserLogin');
             });
 
+            $group->group('/logout', function (RouteCollectorProxy $group) {
+                $group->post('', \controller\users\UserController::class . ':UserLogout');
+            })->add(AuthTokenMiddleware::class);
+
             $group->group('/verify_email', function (RouteCollectorProxy $group) {
                 $group->post('', \controller\users\UserTokenController::class . ':SetVerifyEmailToken')->add(AuthTokenMiddleware::class);
 

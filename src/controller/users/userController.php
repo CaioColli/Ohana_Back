@@ -88,6 +88,16 @@ class UserController
         return Response::Return200($response, $userToken);
     }
 
+    public function UserLogout(PsrRequest $request, PsrResponse $response)
+    {
+        $user = $request->getAttribute('user');
+        $userID = $user['User_ID'];
+
+        UserModel::UserLogout($userID);
+
+        return Response::Return200($response, 'Logout realizado com sucesso!');
+    }
+
     public function UserEdit(PsrRequest $request, PsrResponse $response)
     {
         $user = $request->getAttribute('user');
