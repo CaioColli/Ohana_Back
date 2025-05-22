@@ -3,7 +3,7 @@
         'name' => 'caio/ohana',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'd6c26d2d6b335e761f633b5a889b8b1bfb29df08',
+        'reference' => 'dcf564081b76510d73aff833e61ba1d33d26b5bd',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'caio/ohana' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'd6c26d2d6b335e761f633b5a889b8b1bfb29df08',
+            'reference' => 'dcf564081b76510d73aff833e61ba1d33d26b5bd',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

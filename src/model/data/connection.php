@@ -6,16 +6,16 @@ use PDO;
 
 class Connection
 {
-    private static $host = 'localhost';
-    private static $port = '3306';
-    private static $database = 'ohana';
-    private static $user = 'root';
-    private static $password = '31053105Caio@';
-
     public static function GetConnection()
     {
         try {
-            $pdo = new PDO("mysql:host=" . self::$host . ";port=" . self::$port . ";dbname=" . self::$database, self::$user, self::$password);
+            static $host = $_ENV['DB_HOST'];
+            static $port = $_ENV['DB_PORT'];
+            static $database = $_ENV['DB_DATABASE'];
+            static $user = $_ENV['DB_USER'];
+            static $password = $_ENV['DB_PASSWORD'];
+
+            $pdo = new PDO("mysql:host=$host;port=$port;dbname=$database", $user, $password);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             return $pdo;
