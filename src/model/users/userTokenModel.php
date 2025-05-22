@@ -15,35 +15,35 @@ class UserTokenModel
             $db = Connection::GetConnection();
 
             $sql = $db->prepare('
-                DELETE FROM user_tokens
-                WHERE user_Email = :user_Email AND type = :type
+                DELETE FROM tokens
+                WHERE User_Email = :User_Email AND Type = :Type
             ');
 
-            $sql->bindValue(':user_Email', $userEmail);
-            $sql->bindValue(':type', $type);
+            $sql->bindValue(':User_Email', $userEmail);
+            $sql->bindValue(':Type', $type);
             $sql->execute();
 
             $sql = $db->prepare('
-                INSERT INTO user_tokens
+                INSERT INTO tokens
                 (
-                    type,
-                    user_Email,
-                    token,
-                    token_Expiration
+                    Type,
+                    User_Email,
+                    Token,
+                    Token_Expiration
                 )
                 VALUES
                 (
-                    :type,
-                    :user_Email,
-                    :token,
-                    :token_Expiration
+                    :Type,
+                    :User_Email,
+                    :Token,
+                    :Token_Expiration
                 )
             ');
 
-            $sql->bindValue(':type', $type);
-            $sql->bindValue(':user_Email', $userEmail);
-            $sql->bindValue(':token', $token);
-            $sql->bindValue(':token_Expiration', $tokenExpiration);
+            $sql->bindValue(':Type', $type);
+            $sql->bindValue(':User_Email', $userEmail);
+            $sql->bindValue(':Token', $token);
+            $sql->bindValue(':Token_Expiration', $tokenExpiration);
 
             $sql->execute();
         } catch (Exception $err) {
@@ -58,20 +58,20 @@ class UserTokenModel
 
             $sql = $db->prepare('
                 SELECT 
-                    token,
-                    user_Email
-                FROM user_tokens
-                WHERE token_Expiration >= NOW()    
-                 AND type = :type   
+                    Token,
+                    User_Email
+                FROM tokens
+                WHERE Token_Expiration >= NOW()    
+                 AND Type = :Type   
             ');
 
-            $sql->bindValue(':type', $type);
+            $sql->bindValue(':Type', $type);
             $sql->execute();
 
             $tokens = $sql->fetchAll(PDO::FETCH_ASSOC);
 
             foreach ($tokens as $token) {
-                if (password_verify($resetCode, $token['token'])) {
+                if (password_verify($resetCode, $token['Token'])) {
                     return $token;
                 }
             }
@@ -88,12 +88,12 @@ class UserTokenModel
             $db = Connection::GetConnection();
 
             $sql = $db->prepare('
-                DELETE FROM user_tokens
-                WHERE user_Email = :user_Email AND type = :type
+                DELETE FROM tokens
+                WHERE User_Email = :User_Email AND Type = :Type
             ');
 
-            $sql->bindValue(':type', $type);
-            $sql->bindValue(':user_Email', $userEmail);
+            $sql->bindValue(':Type', $type);
+            $sql->bindValue(':User_Email', $userEmail);
             $sql->execute();
         } catch (Exception $err) {
             throw new Exception('Erro ao deletar token de reset' . $err->getMessage());

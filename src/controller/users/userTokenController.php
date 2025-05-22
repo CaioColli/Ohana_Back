@@ -80,8 +80,8 @@ class UserTokenController
 
         $protectedPassword = password_hash($data['User_Password'], PASSWORD_DEFAULT);
 
-        UserModel::SetNewPassword($protectedPassword, $tokenCode['user_Email']);
-        UserTokenModel::DeleteToken($tokenCode['user_Email'], 'Reset_Password');
+        UserModel::SetNewPassword($protectedPassword, $tokenCode['User_Email']);
+        UserTokenModel::DeleteToken($tokenCode['User_Email'], 'Reset_Password');
 
         return Response::Return200($response, 'Senha mudada com sucesso!');
     }
@@ -130,8 +130,8 @@ class UserTokenController
             return Response::Return400($response, 'Código inválido ou expirado!');
         }
 
-        UserModel::SetEmailVerified($tokenData['user_Email']);
-        UserTokenModel::DeleteToken($tokenData['user_Email'], 'Verify_Email');
+        UserModel::SetEmailVerified($tokenData['User_Email']);
+        UserTokenModel::DeleteToken($tokenData['User_Email'], 'Verify_Email');
 
         return Response::Return200($response, 'Email verificado com sucesso!');
     }

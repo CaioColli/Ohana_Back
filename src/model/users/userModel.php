@@ -181,10 +181,10 @@ class UserModel
             $sql = $db->prepare('
                 UPDATE users
                     SET Email_Verified = 1
-                WHERE user_Email = :user_Email
+                WHERE User_Email = :User_Email
             ');
 
-            $sql->bindValue(':user_Email', $userEmail);
+            $sql->bindValue(':User_Email', $userEmail);
             $sql->execute();
         } catch (Exception $err) {
             throw new Exception('Erro ao mudar a senha senha');
