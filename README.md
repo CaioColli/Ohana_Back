@@ -38,6 +38,10 @@ Inicie o servidor
  php -S 0.0.0.0:8000 -t ./public/
 ```
 
+## Instalando banco de dados
+
+para ter total experiência da aplicação crie em seu editor MySQL as tabelas fornecidas na pasta `public/database`
+
 ## Uso/Exemplos
 
 Na pasta `/public` crie um arquivo `.env` e insira os códigos a seguir:
