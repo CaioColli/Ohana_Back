@@ -219,6 +219,12 @@ class UserController
             return Response::Return400($response, 'Senha incorreta!');
         }
 
+        $oldImagePatch = UserModel::GetUserImage($user['User_ID']);
+
+        if ($oldImagePatch && isset($oldImagePatch['User_Image'])) {
+            FileHelper::DeleteUserImage($oldImagePatch['User_Image']);
+        }
+
         UserModel::UserDelete($user['User_ID']);
 
         return Response::Return200($response, 'Conta deletada com sucesso!');
