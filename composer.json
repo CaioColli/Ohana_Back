@@ -7,7 +7,8 @@
             "model\\": "src/model/",
             "routes\\": "src/routes/",
             "validators\\": "src/validators/",
-            "response\\": "src/response/"
+            "response\\": "src/response/",
+            "helpers\\": "src/helpers/"
         }
     },
     "authors": [

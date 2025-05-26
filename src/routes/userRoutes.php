@@ -38,6 +38,8 @@ class UserRoutes
 
             $group->group('/edit', function (RouteCollectorProxy $group) {
                 $group->patch('', \controller\users\UserController::class . ':UserEdit');
+
+                $group->post('/image', \controller\users\UserController::class . ':UserPostImage');
             })->add(AuthTokenMiddleware::class);
 
             $group->group('/delete', function (RouteCollectorProxy $group) {

@@ -10,6 +10,7 @@ return array(
     'routes\\' => array($baseDir . '/src/routes'),
     'response\\' => array($baseDir . '/src/response'),
     'model\\' => array($baseDir . '/src/model'),
+    'helpers\\' => array($baseDir . '/src/helpers'),
     'controller\\' => array($baseDir . '/src/controller'),
     'app\\' => array($baseDir . '/src/app'),
     'Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),

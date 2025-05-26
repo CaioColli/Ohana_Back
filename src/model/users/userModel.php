@@ -5,6 +5,7 @@ namespace model\users;
 use Exception;
 
 use model\data\Connection;
+use PDO;
 
 class UserModel
 {
@@ -134,6 +135,47 @@ class UserModel
             $sql->execute();
         } catch (Exception $err) {
             throw new Exception('Erro ao tentar editar usuário' . $err->getMessage());
+        }
+    }
+
+    public static function GetUserImage($userID)
+    {
+        try {
+            $db = Connection::GetConnection();
+
+            $sql = $db->prepare('
+                SELECT User_Image
+                FROM users
+                WHERE User_ID = :User_ID
+            ');
+
+            $sql->bindValue(':User_ID', $userID);
+            $sql->execute();
+
+            return $sql->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $err) {
+            throw new Exception('Erro ao tentar resgatar o caminho da imagem do usuário');
+        }
+    }
+
+    public static function UserPostImage($userID, $patch)
+    {
+        try {
+            $db = Connection::GetConnection();
+
+            $sql = $db->prepare('
+                UPDATE users
+                SET User_Image = :User_Image
+                WHERE User_ID = :User_ID
+            ');
+
+            $sql->bindValue(':User_ID', $userID);
+            $sql->bindValue(':User_Image', $patch);
+            $sql->execute();
+
+            return true;
+        } catch (Exception $err) {
+            throw new Exception('Erro ao salvar caminho da imagem no banco de dados' . $err->getMessage());
         }
     }
 
