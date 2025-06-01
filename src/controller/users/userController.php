@@ -151,7 +151,7 @@ class UserController
         $user = $request->getAttribute('user');
 
         $file = UserModel::GetUserImage($user['User_ID']);
-        $oldImagePatch = realpath(__DIR__ . '/../../../public/uploads/' . $file['User_Image'])  ;
+        $oldImagePatch = realpath(__DIR__ . '/../../../public/uploads/' . $file['User_Image']);
 
         if ($file && isset($file['User_Image'])) {
             FileHelper::DeleteUserImage($oldImagePatch);
@@ -185,10 +185,11 @@ class UserController
             return Response::Return400($response, 'Senha incorreta!');
         }
 
-        $oldImagePatch = UserModel::GetUserImage($user['User_ID']);
+        $file = UserModel::GetUserImage($user['User_ID']);
+        $oldImagePatch = realpath(__DIR__ . '/../../../public/uploads/' . $file['User_Image']);
 
-        if ($oldImagePatch && isset($oldImagePatch['User_Image'])) {
-            FileHelper::DeleteUserImage($oldImagePatch['User_Image']);
+        if ($file && isset($file['User_Image'])) {
+            FileHelper::DeleteUserImage($oldImagePatch);
         }
 
         UserModel::UserDelete($user['User_ID']);
