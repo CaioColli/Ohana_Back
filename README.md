@@ -70,10 +70,11 @@ Configuração do banco de dados
 | `/user/login` | `post` | Efetua login de um usuário | `null` |
 | `/user/logout` | `post` | Efetura o logout do usuário | **Necessário token autenticação**  |
 | `/user/verify_email` | `post` | Manda email de verificação | **Necessário token autenticação** |
-| `/user/verify_email/confirm`** | `post` | Confirma email do usuário | `null` |
+| `/user/verify_email/confirm` | `post` | Confirma email do usuário | `null` |
 | `/user/reset` | `post` |  Manda código para mudar senha de usuário | `null` |
 | `/user/reset/change_password` | `post` |  Muda senha do usuário | `null` |
 | `/user/edit` | `patch` | Edição de perfil | **Necessário token autenticação** |
+| `/user/edit/image` | `post` | Edição foto perfil | **Necessário token autenticação** |
 | `/user/delete` | `delete` | Apaga conta do usuário | **Necessário token autenticação** |
 | `/user` | `get` |  Retorna dados do usuário | **Necessário token autenticação** |
 
